@@ -1,12 +1,12 @@
 
+//loading necessary packages
 const readlineSync = require("readline-sync");
 const chalk = require("chalk");
 const gradient = require("gradient-string");
 const figlet = require("figlet");
 
-
+//Defining color scheme: Chalk, gradient packages used
 var colorScheme = {
-	//head: chalk.bold.underline.black.bgCyanBright,
 	head: gradient.rainbow,
 	tag: gradient.teen,
 	play: chalk.bold.red.bgWhite,
@@ -16,11 +16,13 @@ var colorScheme = {
 	highScore: gradient.pastel
 };
 
+
+//variables to store quiz stats
 let scores = []
 let highScore = 0;
 let visitCount = 0;
 
-
+//question set for the quiz
 let questions = [{
 	query: "Would I rather be too busy or too bored?",
 	options: ["Too busy", "Too bored"],
@@ -44,14 +46,17 @@ let questions = [{
 }];
 
 function readInput(prompt) {
+	//function to read input from console
 	return readlineSync.question(prompt);
 }
 
 function writeOutput(message) {
+	//function to write output to console
 	console.log(message);
 }
 
 function displayScores() {
+	//Display user score, high score and leader board
 	let userScore = scores[scores.length-1];
 	writeOutput(colorScheme.score("\nYour score: " + userScore + "/"+questions.length));
 
@@ -77,12 +82,13 @@ function quiz(questions) {
 
 	let play = true;
 
+	//Option to continue or exit
 	while(play) {
 		play = readlineSync.keyInYN(colorScheme.play('\nDo you want to play?'));
 
 		if( play === false || play === "") {
 			console.log(colorScheme.play('K. Bye.'));
-			process.exit();
+			return;
 		}
 
 		writeOutput(colorScheme.head("\nLet's start!\n"));
