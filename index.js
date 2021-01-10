@@ -1,15 +1,19 @@
 
 const readlineSync = require("readline-sync");
 const chalk = require("chalk");
-const chalkAnimate = require("chalk-animation")
+const gradient = require("gradient-string");
+const figlet = require("figlet");
+
 
 var colorScheme = {
-	head: chalk.bold.underline.black.bgCyanBright,
+	//head: chalk.bold.underline.black.bgCyanBright,
+	head: gradient.rainbow,
+	tag: gradient.teen,
 	play: chalk.bold.red.bgWhite,
-	query: chalk.yellowBright,
+	query: gradient.instagram,
 	options: chalk.gray,
-	score: chalk.magentaBright,
-	highScore: chalk.greenBright
+	score: gradient.passion,
+	highScore: gradient.pastel
 };
 
 let scores = []
@@ -49,7 +53,7 @@ function writeOutput(message) {
 
 function displayScores() {
 	let userScore = scores[scores.length-1];
-	writeOutput(colorScheme.score("\nYour score: " + userScore));
+	writeOutput(colorScheme.score("\nYour score: " + userScore + "/"+questions.length));
 
 	if(userScore >= highScore) {
 		highScore = userScore;
@@ -64,7 +68,12 @@ function displayScores() {
 
 
 function quiz(questions) {
-	writeOutput(colorScheme.head("\nHow well do you know me?\n"));
+
+	writeOutput(colorScheme.head(figlet.textSync('QuizMate!', {
+    horizontalLayout: 'full',
+	})));
+
+	writeOutput(colorScheme.tag("\nHow well do you know me?\n"));
 
 	let play = true;
 
@@ -78,8 +87,10 @@ function quiz(questions) {
 
 		writeOutput(colorScheme.head("\nLet's start!\n"));
 
+		console.log(colorScheme.play("\nYour user ID:" + visitCount));
 		scores.push(0);
 		visitCount++;
+
 		for(let i=0; i<questions.length; i++) {
 			let index = readlineSync.keyInSelect(questions[i].options, colorScheme.query(questions[i].query), {cancel:"Skip this question"});
 
@@ -90,6 +101,7 @@ function quiz(questions) {
 			else {
 				writeOutput(colorScheme.play("Wrong! It's "+ questions[i].answer));
 			}
+			writeOutput("------------------------------------------");
 		}
 
 		displayScores();
